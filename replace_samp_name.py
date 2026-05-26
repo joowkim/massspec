@@ -68,12 +68,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Replace raw file names with sample names in Spectronaut output.")
     parser.add_argument(
         "--sample-key",
-        default="input/sample_key.csv",
-        help="Path to sample key CSV (default: input/sample_key.csv)"
+        required=True,
+        help="Path to sample key CSV"
     )
     parser.add_argument(
         "--spect-out",
-        default="input/Brown_Prj-BR2315_80mouse-liver_directDIA_4-17-2026_peptide-quantities.csv",
+        required=True,
         help="Path to Spectronaut peptide quantities CSV"
     )
     args = parser.parse_args()
