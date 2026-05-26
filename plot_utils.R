@@ -168,3 +168,79 @@ plot_rle <- function(normal_mat, meta, sample_name) {
 
   return(p)
 }
+
+prepare_de_results <- function(result_df) {
+  res_df <- result_df |>
+    dplyr::rename(
+      Moderated_t_statistic = t,
+      p_value               = P.Value,
+      adjusted_p_value      = adj.P.Val,
+      B_statistic           = B
+    ) |>
+    dplyr::select(-Sig)
+
+  return (res_df)
+}
+
+run_contrast <- function(fit2, coef_name) {
+  res_df <- topTable(fit2, coef = coef_name, number = Inf, sort.by = "P") |>
+    as.data.frame() |>
+    rownames_to_column(var = "prot_accessions") |>
+    dplyr::rename(Nprecur = NPrec) |>
+    dplyr::relocate(Nprecur, .after = genes) |>
+    mutate(Sig = if_else(`adj.P.Val` < 0.05, "Sig", "Not sig"))
+
+  return (res_df)
+}
+
+plot_missing <- function(data, title = "Missing Values") {
+
+  n <- nrow(data)
+  df <- data.frame(
+    feature     = names(data),
+    pct_missing = sapply(data, function(x) sum(is.na(x)) / n * 100)
+  )
+
+  plt <- ggplot2::ggplot(df, ggplot2::aes(x = feature, y = pct_missing)) +
+    ggplot2::geom_bar(stat = "identity", fill = "#3266ad", width = 0.7) +
+    ggplot2::geom_text(
+      ggplot2::aes(label = sprintf("%.1f%%", pct_missing)),
+      hjust = -0.1, size = 3.2, color = "grey30"
+    ) +
+    ggplot2::scale_y_continuous(
+      limits = c(0, 110),
+      labels = function(x) paste0(x, "%")
+    ) +
+    ggplot2::coord_flip() +
+    ggplot2::labs(title = title, x = NULL, y = "% Missing") +
+    ggplot2::theme(panel.grid.minor = ggplot2::element_blank()) +
+    ggplot2::theme_bw()
+
+  return (plt)
+}
+
+filter_by_pepcount <- function(df, prot_col, pep_col, min_peps = 2) {
+  pep_counts <- df |>
+    dplyr::distinct(.data[[prot_col]], .data[[pep_col]]) |>
+    dplyr::count(.data[[prot_col]])
+
+  keep <- pep_counts |>
+    dplyr::filter(n >= min_peps) |>
+    dplyr::pull(.data[[prot_col]])
+
+  df |>
+    dplyr::filter(.data[[prot_col]] %in% keep)
+}
+
+static_md_plot <- function(dat_df, hline_y) {
+
+  plt <-  ggplot(dat_df) + geom_point(aes(x = AveExpr, y=logFC, color=Sig)) +
+    geom_hline(yintercept = hline_y, color = 'red') +
+    scale_color_manual(values = c("black", "salmon")) +
+    ylim(-4, 4) +
+    xlim(4, 25) +
+    xlab("average log expression")
+
+  return (plt)
+
+}
