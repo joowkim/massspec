@@ -244,3 +244,32 @@ static_md_plot <- function(dat_df, hline_y) {
   return (plt)
 
 }
+
+
+sig_logfc_bar_plot <- function(res_df, topN) {
+  # top N upregulated proteins by logFC
+  top_up_df <- res_df |>
+    arrange(desc(logFC)) |>
+    head(topN) |>
+    dplyr::select(prot_accessions, logFC, Sig)
+
+  # top N downregulated proteins by logFC
+  top_down_df <- res_df |>
+    arrange(logFC) |>
+    head(topN) |>
+    dplyr::select(prot_accessions, logFC, Sig)
+
+  top_n_df <- bind_rows(top_up_df, top_down_df) |>
+    mutate(prot_accessions = reorder(prot_accessions, logFC))
+
+  plt <- ggplot(top_n_df) +
+    geom_col(aes(x = logFC, y = prot_accessions, fill = Sig)) +
+    scale_fill_manual(values = c("Not sig" = "black", "Sig" = "salmon")) +
+    labs(
+      title = paste0("Top ", topN, " up and down regulated proteins"),
+      x = "logFC",
+      y = "Accession"
+    )
+
+  return(plt)
+}
