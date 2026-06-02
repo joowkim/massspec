@@ -31,7 +31,7 @@ plot_pca <- function(pca_obj,
     xlab(paste0(pc_comp1, ": ", pca_eigen_val[[pc_comp1]], "%")) +
     ylab(paste0(pc_comp2, ": ", pca_eigen_val[[pc_comp2]], "%")) +
     ggtitle(title) +
-    theme_bw() +
+    theme_minimal() +
     theme(aspect.ratio = 1, text = element_text(size = 15))
 
   if (!is.null(color)) p <- p + scale_color_viridis_d()
@@ -128,7 +128,7 @@ plot_volcano <- function(df, uniq_id, logfc_id, pval_id, pval_cutoff = 0.05, top
       max.overlaps = Inf,
       size = 3
     ) +
-    theme_bw() +
+    theme_minimal() +
     ylab(stringr::str_glue("-log10({pval_id})")) +
     xlab(logfc_id) + 
     ggtitle(title)
@@ -155,7 +155,7 @@ plot_rle <- function(normal_mat, meta, sample_name) {
         y = "log2_intensity",
         color = "Group",
         x.text.angle = 45,
-        ggtheme = theme_bw(),
+        ggtheme = theme_minimal(),
         outliers = FALSE,
         bxp.errorbar = TRUE
       ) +
@@ -214,7 +214,7 @@ plot_missing <- function(data, title = "Missing Values") {
     ggplot2::coord_flip() +
     ggplot2::labs(title = title, x = NULL, y = "% Missing") +
     ggplot2::theme(panel.grid.minor = ggplot2::element_blank()) +
-    ggplot2::theme_bw()
+    ggplot2::theme_minimal()
 
   return (plt)
 }
