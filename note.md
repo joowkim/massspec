@@ -6,6 +6,8 @@ https://jessegmeyerlab.github.io/proteomics-tutorial/v/b43d842d9c8577826b88636f5
 
 R for Mass Spectrometry
 
+https://www.rformassspectrometry.org/documentation/
+
 https://rformassspectrometry.github.io/book/
 
 UC Davis proteomics short course
