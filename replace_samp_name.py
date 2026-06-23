@@ -27,6 +27,14 @@ def replace_file_name_w_samp_name(col_header: List[str], samp_key: Dict[str, str
         if not "tims_" in colname:
             res_list.append(colname)
         else:
+            # Regex breakdown for r'\]\s+(.+?)_Slot\d':
+            #   Part      | Meaning
+            #   ----------|------------------------------------------------------
+            #   \]        | match a literal ]
+            #   \s+       | match one or more spaces after it
+            #   (.+?)     | capture group: any characters, non-greedy
+            #   _Slot\d   | match literal _Slot followed by one digit
+            # e.g. "[1] tims_26apr0613_Slot2-31_..." -> group(1) == "tims_26apr0613"
             match = re.search(r'\]\s+(.+?)_Slot\d', colname)
 
             if match is None:
