@@ -169,7 +169,10 @@ plot_rle <- function(normal_mat, meta, sample_name) {
   return(p)
 }
 
-prepare_de_results <- function(result_df) {
+prepare_de_results <- function(result_df,
+                               pval_cutoff     = NULL,
+                               adj_pval_cutoff = NULL,
+                               logfc_cutoff    = NULL) {
   res_df <- result_df |>
     dplyr::rename(
       Moderated_t_statistic = t,
@@ -178,6 +181,11 @@ prepare_de_results <- function(result_df) {
       B_statistic           = B
     ) |>
     dplyr::select(-Sig)
+
+  # apply optional filters; NULL means no filtering
+  if (!is.null(pval_cutoff))     res_df <- res_df |> dplyr::filter(p_value < pval_cutoff)
+  if (!is.null(adj_pval_cutoff)) res_df <- res_df |> dplyr::filter(adjusted_p_value < adj_pval_cutoff)
+  if (!is.null(logfc_cutoff))    res_df <- res_df |> dplyr::filter(abs(logFC) > logfc_cutoff)
 
   return (res_df)
 }
