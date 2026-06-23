@@ -237,8 +237,8 @@ static_md_plot <- function(dat_df, hline_y) {
   plt <-  ggplot(dat_df) + geom_point(aes(x = AveExpr, y=logFC, color=Sig)) +
     geom_hline(yintercept = hline_y, color = 'red') +
     scale_color_manual(values = c("black", "salmon")) +
-    ylim(-4, 4) +
-    xlim(4, 25) +
+    ylim(-3, 3) +
+    xlim(0, 20) +
     xlab("average log expression")
 
   return (plt)
