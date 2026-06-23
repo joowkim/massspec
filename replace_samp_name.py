@@ -65,9 +65,8 @@ def rewrite_spec_csv(spect_out: str, samp_key: Dict[str, str], output_f: str):
 def main(sample_key: str, spect_out: str):
     samp_key = read_sample_key(sample_key)
 
-    os.makedirs("output", exist_ok=True)
     input_filename = os.path.basename(spect_out)
-    output_f = os.path.join("output", f"renamed_{input_filename}")
+    output_f = os.path.join("./", f"renamed_{input_filename}")
 
     rewrite_spec_csv(spect_out=spect_out, samp_key=samp_key, output_f=output_f)
 
