@@ -9,18 +9,23 @@ def read_sample_key(sample_key: str) -> Dict[str, str]:
     if not os.path.isfile(sample_key):
         raise FileNotFoundError(f"{sample_key} is not found!")
 
+    # collect columns separately so we can run duplicate checks after reading
     samp_names: List[str] = []
     file_names: List[str] = []
 
     with open(sample_key) as fin:
+        # validate header has exactly 2 columns
         header = fin.readline().strip().split(",")
         if len(header) != 2:
             raise ValueError(f"Sample key must have 2 columns, found {len(header)}")
 
+        # line_num starts at 2 because line 1 is the header
         for line_num, line in enumerate(fin, start=2):
+            # blank lines are unexpected -- likely a formatting error
             if not line.strip():
                 raise ValueError(f"Line {line_num} is empty -- check the sample key file for blank lines")
             tmp: List[str] = line.strip().split(",")
+            # each data row must also have exactly 2 columns
             if len(tmp) != 2:
                 raise ValueError(f"Line {line_num} has {len(tmp)} columns, expected 2")
             samp_names.append(tmp[0])
@@ -38,6 +43,7 @@ def read_sample_key(sample_key: str) -> Dict[str, str]:
     if dups:
         raise ValueError(f"Duplicate file names in sample key: {dups}")
 
+    # build {file_name: samp_name} lookup dict
     res_dict: Dict[str, str] = {}
     for samp_name, file_name in zip(samp_names, file_names):
         res_dict[file_name] = samp_name
@@ -63,6 +69,7 @@ def replace_file_name_w_samp_name(col_header: List[str], samp_key: Dict[str, str
             # e.g. "[1] tims_26apr0613_Slot2-31_..." -> group(1) == "tims_26apr0613"
             match = re.search(r'\]\s+(.+?)_Slot\d', colname)
 
+            # header doesn't match expected Spectronaut format
             if match is None:
                 raise ValueError(
                     f"Unexpected column header in Spectronaut output: {colname!r}\n"
@@ -71,6 +78,7 @@ def replace_file_name_w_samp_name(col_header: List[str], samp_key: Dict[str, str
 
             file_name: str = match.group(1)  # "tims_26apr0613"
             samp_name = samp_key.get(file_name)
+            # file_name from Spectronaut must exist in the sample key
             if samp_name is None:
                 raise KeyError(
                     f"'{file_name}' (extracted from Spectronaut output) not found in sample key.\n"
