@@ -50,7 +50,7 @@ def replace_file_name_w_samp_name(col_header: List[str], samp_key: Dict[str, str
         # colname can be
         # "[1] tims_26apr0613_Slot2-31_1_14771.d.EG.TotalQuantity (Settings)",
         # "[53] tims_26apr0668-re_Slot2-9_1_14880.d.EG.TotalQuantity (Settings)"
-        if not "tims_" in colname:
+        if "tims_" not in colname:
             res_list.append(colname)
         else:
             # Regex breakdown for r'\]\s+(.+?)_Slot\d':
@@ -97,7 +97,7 @@ def main(samplekey: str, spect: str):
     samp_key = read_sample_key(samplekey)
 
     input_filename = os.path.basename(spect)
-    output_f = os.path.join("./", f"renamed_{input_filename}")
+    output_f = f"renamed_{input_filename}"
 
     rewrite_spec_csv(spect_out=spect, samp_key=samp_key, output_f=output_f)
 
