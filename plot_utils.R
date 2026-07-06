@@ -201,29 +201,33 @@ run_contrast <- function(fit2, coef_name) {
   return (res_df)
 }
 
-plot_missing <- function(data, title = "Missing Values") {
-
-  n <- nrow(data)
+plot_missing <- function(data, meta, title = "Missing Values") {
+  
   df <- data.frame(
-    feature     = names(data),
-    pct_missing = sapply(data, function(x) sum(is.na(x)) / n * 100)
+    Sample     = names(data),
+    pct_missing = sapply(data, function(x) mean(is.na(x)) * 100)
   )
-
-  plt <- ggplot2::ggplot(df, ggplot2::aes(x = feature, y = pct_missing)) +
-    ggplot2::geom_bar(stat = "identity", fill = "#3266ad", width = 0.7) +
-    ggplot2::geom_text(
-      ggplot2::aes(label = sprintf("%.1f%%", pct_missing)),
+  
+  required_cols <- c("Sample", "Group")
+  stopifnot("meta must have Sample and Group columns" = all(required_cols %in% colnames(meta)))
+  
+  df <- df |> left_join(meta |> dplyr::select(Sample, Group), by="Sample")
+  
+  plt <- ggplot(df, aes(x = Sample, y = pct_missing, fill = Group)) +
+    geom_col(width = 0.7) +
+    geom_text(
+      aes(label = sprintf("%.1f%%", pct_missing)),
       hjust = -0.1, size = 3.2, color = "grey30"
     ) +
-    ggplot2::scale_y_continuous(
+    scale_y_continuous(
       limits = c(0, 110),
       labels = function(x) paste0(x, "%")
     ) +
-    ggplot2::coord_flip() +
-    ggplot2::labs(title = title, x = NULL, y = "% Missing") +
-    ggplot2::theme(panel.grid.minor = ggplot2::element_blank()) +
-    ggplot2::theme_minimal()
-
+    coord_flip() +
+    labs(title = title, x = NULL, y = "% Missing") +
+    theme_minimal() +
+    theme(panel.grid.minor = element_blank())
+  
   return (plt)
 }
 
