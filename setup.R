@@ -18,9 +18,22 @@ library(ggplot2)
 
 theme_set(theme_minimal(12))
 
-# discrete scales
-options(ggplot2.discrete.colour = scale_color_viridis_d)
-options(ggplot2.discrete.fill   = scale_fill_viridis_d)
+# Pick the discrete color/fill palette for ggplot2.
+# palette: "viridis" (default) or any RColorBrewer palette name
+#          (e.g. "Pastel1", "Pastel2", "Set3", "Set1", "Dark2")
+set_discrete_palette <- function(palette = "viridis") {
+  if (palette == "viridis") {
+    options(ggplot2.discrete.colour = scale_color_viridis_d)
+    options(ggplot2.discrete.fill   = scale_fill_viridis_d)
+  } else {
+    options(ggplot2.discrete.colour = scale_color_brewer(palette = palette))
+    options(ggplot2.discrete.fill   = scale_fill_brewer(palette = palette))
+  }
+  message("Discrete palette set to: ", palette)
+}
+
+# set default discrete palette on load
+set_discrete_palette("viridis")
 
 # continuous scales
 options(ggplot2.continuous.colour = scale_color_viridis_c)
