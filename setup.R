@@ -25,12 +25,19 @@ set_discrete_palette <- function(palette = "viridis") {
   if (palette == "viridis") {
     options(ggplot2.discrete.colour = scale_color_viridis_d)
     options(ggplot2.discrete.fill   = scale_fill_viridis_d)
+  ## ggplot defult color palette
+  } else if (palette == "default") {
+    options(ggplot2.discrete.colour = NULL)
+    options(ggplot2.discrete.fill   = NULL)
   } else {
-    options(ggplot2.discrete.colour = scale_color_brewer(palette = palette))
-    options(ggplot2.discrete.fill   = scale_fill_brewer(palette = palette))
+    # wrap in function(...) so ggplot2 calls this later, instead of us
+    # building the scale object right now
+    options(ggplot2.discrete.colour = function(...) scale_color_brewer(palette = palette, ...))
+    options(ggplot2.discrete.fill   = function(...) scale_fill_brewer(palette = palette, ...))
   }
   message("Discrete palette set to: ", palette)
 }
+
 
 # set default discrete palette on load
 set_discrete_palette("viridis")
