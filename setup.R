@@ -46,3 +46,5 @@ devtools::source_url(
 )
 
 message("setup.R loaded successfully")
+message("if you want to go with a different qualitative color palette, e.g. Pastel1, Pastel2, Set3, or default")
+message("set_discrete_palette('Pastel1')")
