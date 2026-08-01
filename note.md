@@ -14,6 +14,10 @@ UC Davis proteomics short course
 
 https://video.ucdavis.edu/playlist/dedicated/0_4jkc4swu/0_qmj5meas
 
+Proteomics Data Analysis 2021 (PDA21)
+
+https://statomics.github.io/PDA21/index.html
+
 # DE tools
 
 ## Limpa
