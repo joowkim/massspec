@@ -284,6 +284,7 @@ filter_by_pepcount <- function(df, prot_col, pep_col, min_peps = 2) {
 }
 
 static_md_plot <- function(dat_df, hline_y) {
+  dat_df <- dat_df |> mutate(Sig = if_else(`P.Value` < 0.05, "Sig", "NotSig"))
 
   plt <-  ggplot(dat_df) + geom_point(aes(x = AveExpr, y=logFC, color=Sig)) +
     geom_hline(yintercept = hline_y, color = 'red') +
