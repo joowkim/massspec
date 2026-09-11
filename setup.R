@@ -16,7 +16,7 @@ dir.create("figures/pdf", recursive = TRUE, showWarnings = FALSE)
 # ── ggplot2 theme & color defaults ────────────────────────────────────────────
 library(ggplot2)
 
-theme_set(theme_minimal(12))
+theme_set(theme_classic(12))
 
 # Pick the discrete color/fill palette for ggplot2.
 # palette: "viridis" (default) or any RColorBrewer palette name

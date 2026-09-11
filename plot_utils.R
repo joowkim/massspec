@@ -31,7 +31,7 @@ plot_pca <- function(pca_obj,
     xlab(paste0(pc_comp1, ": ", pca_eigen_val[[pc_comp1]], "%")) +
     ylab(paste0(pc_comp2, ": ", pca_eigen_val[[pc_comp2]], "%")) +
     ggtitle(title) +
-    theme_minimal() +
+    # theme_minimal() +
     theme(aspect.ratio = 1, text = element_text(size = 15))
 
   #if (!is.null(color)) p <- p + scale_color_viridis_d()
@@ -128,7 +128,7 @@ plot_volcano <- function(df, uniq_id, logfc_id, pval_id, pval_cutoff = 0.05, top
       max.overlaps = Inf,
       size = 3
     ) +
-    theme_minimal() +
+    # theme_minimal() +
     ylab(stringr::str_glue("-log10({pval_id})")) +
     xlab(logfc_id) + 
     ggtitle(title)
@@ -155,7 +155,7 @@ plot_rle <- function(normal_mat, meta, sample_name) {
         y = "log2_intensity",
         color = "Group",
         x.text.angle = 45,
-        ggtheme = theme_minimal(),
+        ggtheme = theme_classic(),
         outliers = FALSE,
         bxp.errorbar = TRUE
       ) +
@@ -195,8 +195,7 @@ run_contrast <- function(fit2, coef_name) {
     as.data.frame() |>
     rownames_to_column(var = "prot_accessions") |>
     dplyr::rename(Nprecur = NPrec) |>
-    dplyr::relocate(Nprecur, .after = genes) |>
-    mutate(Sig = if_else(`adj.P.Val` < 0.05, "Sig", "Not sig"))
+    dplyr::relocate(Nprecur, .after = genes)
 
   return (res_df)
 }
@@ -225,7 +224,7 @@ plot_missing <- function(data, meta, title = "Missing Values") {
     ) +
     coord_flip() +
     labs(title = title, x = NULL, y = "% Missing") +
-    theme_minimal() +
+    # theme_minimal() +
     theme(panel.grid.minor = element_blank())
   
   return (plt)
