@@ -228,7 +228,7 @@ get_num_proteins <- function(raw_dat_filt_log2_long, meta) {
       expand = expansion(mult = c(0, 0.12))
     ) +
     labs(
-      title = "Number of proteins by sample",
+      title = "Number of proteins per sample",
       x = NULL,
       y = "Number of proteins"
     ) +
