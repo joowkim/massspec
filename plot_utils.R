@@ -193,12 +193,53 @@ prepare_de_results <- function(result_df,
 run_contrast <- function(fit2, coef_name) {
   res_df <- topTable(fit2, coef = coef_name, number = Inf, sort.by = "P") |>
     as.data.frame() |>
-    rownames_to_column(var = "prot_accessions") |>
+    rownames_to_column(var = "Accession") |>
     dplyr::rename(Nprecur = NPrec) |>
-    dplyr::relocate(Nprecur, .after = genes)
+    dplyr::relocate(Nprecur, .after = Gene)
 
   return (res_df)
 }
+
+get_num_proteins <- function(raw_dat_filt_log2_long, meta) {
+  n_prot_dect_df <- raw_dat_filt_log2_long |>
+    drop_na(intensity) |>
+    group_by(Sample) |>
+    summarise(
+      n_proteins = n_distinct(Accession)
+    )
+
+  n_prot_dect_df <- n_prot_dect_df |>
+    left_join(meta, by = "Sample")
+
+  df <- n_prot_dect_df
+
+  plt <- ggplot(
+    df,
+    aes(x = Sample, y = n_proteins, fill = Group)
+  ) +
+    geom_col(width = 0.7) +
+    geom_text(
+      aes(label = n_proteins),
+      hjust = -0.1,
+      size = 3.2,
+      color = "grey30"
+    ) +
+    coord_flip() +
+    scale_y_continuous(
+      expand = expansion(mult = c(0, 0.12))
+    ) +
+    labs(
+      title = "Number of proteins by sample",
+      x = NULL,
+      y = "Number of proteins"
+    ) +
+    theme(
+      panel.grid.minor = element_blank()
+    )
+
+  return(plt)
+}
+
 
 plot_missing <- function(data, meta, title = "Missing Values") {
   
