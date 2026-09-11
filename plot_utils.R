@@ -179,8 +179,7 @@ prepare_de_results <- function(result_df,
       p_value               = P.Value,
       adjusted_p_value      = adj.P.Val,
       B_statistic           = B
-    ) |>
-    dplyr::select(-Sig)
+    )
 
   # apply optional filters; NULL means no filtering
   if (!is.null(pval_cutoff))     res_df <- res_df |> dplyr::filter(p_value < pval_cutoff)
