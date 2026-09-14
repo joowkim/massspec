@@ -199,12 +199,12 @@ run_contrast <- function(fit2, coef_name) {
   return (res_df)
 }
 
-get_num_proteins <- function(raw_dat_filt_log2_long, meta) {
+get_num_proteins <- function(raw_dat_filt_log2_long, meta, prot_id) {
   n_prot_dect_df <- raw_dat_filt_log2_long |>
-    drop_na(intensity) |>
+    drop_na(log2_intensity) |>
     group_by(Sample) |>
     summarise(
-      n_proteins = n_distinct(Accession)
+      n_proteins = dplyr::n_distinct({{ prot_id }})
     )
 
   n_prot_dect_df <- n_prot_dect_df |>
