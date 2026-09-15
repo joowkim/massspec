@@ -1,4 +1,4 @@
-# setup.R
+rcartocolor# setup.R
 # Shared setup file for data analysis projects.
 # Load via: devtools::source_url("https://raw.githubusercontent.com/yourname/yourrepo/refs/heads/main/setup.R")
 
@@ -66,4 +66,5 @@ message("if you want to go with a different qualitative color palette, e.g. Past
 message("set_discrete_palette('Pastel1')")
 message("for a colorblind-safe palette via paletteer, e.g.:")
 message("set_discrete_palette('colorblindr::OkabeIto')")
-message('to see more color schemes, go over https://emilhvitfeldt.github.io/r-color-palettes/discrete.html#category=Package%20-%20colorBlindness')
+message('See moe color schemes here: https://emilhvitfeldt.github.io/r-color-palettes/discrete.html#category=Package%20-%20colorBlindness')
+message('another source: https://jakubnowosad.com/rcartocolor/')
