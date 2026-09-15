@@ -1,4 +1,3 @@
-rcartocolor# setup.R
 # Shared setup file for data analysis projects.
 # Load via: devtools::source_url("https://raw.githubusercontent.com/yourname/yourrepo/refs/heads/main/setup.R")
 
