@@ -209,7 +209,8 @@ get_num_proteins <- function(raw_dat_filt_log2_long, meta, prot_id) {
 
   n_prot_dect_df <- n_prot_dect_df |>
     left_join(meta, by = "Sample") |>
-    arrange(Group, Sample)
+    arrange(Group, Sample) |>
+    mutate(Sample = factor(Sample, levels = Sample))
 
   df <- n_prot_dect_df
 
@@ -251,7 +252,7 @@ plot_missing <- function(data, meta, title = "Missing Values") {
   required_cols <- c("Sample", "Group")
   stopifnot("meta must have Sample and Group columns" = all(required_cols %in% colnames(meta)))
   
-  df <- df |> left_join(meta |> dplyr::select(Sample, Group), by="Sample") |> arrange(Group, Sample)
+  df <- df |> left_join(meta |> dplyr::select(Sample, Group), by="Sample") |> arrange(Group, Sample) |> mutate(Sample = factor(Sample, levels = Sample))
   
   plt <- ggplot(df, aes(x = Sample, y = pct_missing, fill = Group)) +
     geom_col(width = 0.7) +
