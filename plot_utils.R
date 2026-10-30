@@ -200,6 +200,10 @@ run_contrast <- function(fit2, coef_name) {
 }
 
 get_num_proteins <- function(raw_dat_filt_log2_long, meta, prot_id) {
+
+  required_cols <- c("Sample", "Group")
+  stopifnot("meta must have Sample and Group columns" = all(required_cols %in% colnames(meta)))
+
   n_prot_dect_df <- raw_dat_filt_log2_long |>
     drop_na(log2_intensity) |>
     group_by(Sample) |>
@@ -235,7 +239,8 @@ get_num_proteins <- function(raw_dat_filt_log2_long, meta, prot_id) {
       y = "Number of proteins"
     ) +
     theme(
-      panel.grid.minor = element_blank()
+      panel.grid.minor = element_blank(),
+      axis.text.y = element_text(size = 8)
     )
 
   return(plt)
